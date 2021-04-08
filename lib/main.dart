@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/screens/stripe_sdk.dart';
 import 'dart:convert';
 import 'package:stripe_payment/stripe_payment.dart';
 import 'dart:io';
@@ -69,9 +70,9 @@ class _MyApp1State extends State<MyApp1> {
   Widget build(BuildContext context) {
     return new MaterialApp(
       home: new Scaffold(
-        // floatingActionButton: FloatingActionButton(onPressed: (){
-        //   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ShopPay()));
-        // },),
+        floatingActionButton: FloatingActionButton(child: Icon(Icons.refresh),onPressed: (){
+          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MyApp2()));
+        },),
         key: _scaffoldKey,
         appBar: new AppBar(
           title: new Text('Stripe Payment'),
@@ -99,6 +100,10 @@ class _MyApp1State extends State<MyApp1> {
                 StripePayment.createSourceWithParams(SourceParams(
                   type: 'ideal',
                   amount: 1099,
+                  name: 'test name',
+                  card: testCard,
+                  country: 'india',
+                  email: 'test mail',
                   currency: 'INR',
                   returnURL: 'example://stripe-redirect',
                 )).then((source) {
@@ -186,7 +191,7 @@ class _MyApp1State extends State<MyApp1> {
                   : () {
                 StripePayment.confirmPaymentIntent(
                   PaymentIntent(
-                    clientSecret: _paymentIntentClientSecret,
+                    clientSecret: 'pi_1IdaEHSGgp78HSWolzA8wB83_secret_3YQN9Z4sNoMiDqo37zoySvSrv',
                     paymentMethodId: _paymentMethod.id,
                     paymentMethod: PaymentMethodRequest(card: testCard,
                       token: _paymentToken,),
@@ -208,7 +213,7 @@ class _MyApp1State extends State<MyApp1> {
                   ? null
                   : () {
                 StripePayment.authenticatePaymentIntent(
-                    clientSecret: _paymentIntentClientSecret)
+                    clientSecret: 'pi_1IdaEHSGgp78HSWolzA8wB83_secret_3YQN9Z4sNoMiDqo37zoySvSrv')
                     .then((paymentIntent) {
                   _scaffoldKey.currentState.showSnackBar(SnackBar(
                       content: Text(
